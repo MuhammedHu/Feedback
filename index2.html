@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Markup Valley - Feedback</title>
+    <style>
+        /* General Styles */
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #6a11cb, #2575fc);
+            color: #fff;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.15);
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+            backdrop-filter: blur(10px);
+        }
+
+        h1 {
+            font-size: 2.2rem;
+            margin-bottom: 1.5rem;
+            font-weight: 600;
+        }
+
+        input, textarea {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            background: rgba(255, 255, 255, 0.9);
+            color: #333;
+            transition: 0.3s ease;
+            outline: none;
+        }
+
+        input:focus, textarea:focus {
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+        }
+
+        textarea {
+            resize: none;
+            height: 120px;
+        }
+
+        button {
+            background: #ffcc00;
+            color: #333;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-size: 1rem;
+            cursor: pointer;
+            font-weight: bold;
+            transition: 0.3s ease;
+        }
+
+        button:hover {
+            background: #ff9900;
+        }
+
+        .message {
+            margin-top: 1rem;
+            font-size: 1rem;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Markup Valley</h1>
+        <form onsubmit="sendFeedback(); return false;">
+            <input type="text" id="name" placeholder="Your Name" required>
+            <input type="text" id="phone" placeholder="Phone No" required>
+            <input type="text" id="city" placeholder="Your City" required>
+            <input type="email" id="email" placeholder="Your Email" required>
+            <textarea id="feedback" placeholder="Your Feedback" required></textarea>
+            <button type="submit">Submit Feedback</button>
+        </form>
+        <div id="message" class="message"></div>
+    </div>
+
+    <!-- EmailJS Script -->
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    <script>
+        // Initialize EmailJS with your Public Key
+        (function () {
+            emailjs.init('kMKo3vsyGYFquJEdb'); // Replace with your EmailJS public key
+        })();
+
+        function sendFeedback() {
+            // Get form data
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const phone = document.getElementById('phone').value;
+            const city = document.getElementById('city').value;
+            const feedback = document.getElementById('feedback').value;
+
+            // Send email using EmailJS
+            emailjs.send('service_4coyn68', 'template_bcxu9dh', {
+                Name: name,
+                Email: email,
+                Phone: phone,
+                City: city,
+                Feedback: feedback
+            })
+            .then(() => {
+                document.getElementById('message').textContent = 'Thank you for your feedback!';
+                document.querySelector('form').reset(); // Reset the form
+            }, (error) => {
+                console.error('Failed to send feedback:', error);
+                document.getElementById('message').textContent = 'Failed to send feedback. Please try again.';
+            });
+        }
+    </script>
+</body>
+</html>
